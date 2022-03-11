@@ -1,3 +1,4 @@
+import { OverworldEvent } from "./OverWorldEvent";
 import { useGrid,nextPosition} from "./share/utils";
 export class OverworldMap {
     constructor(config) {
@@ -30,6 +31,17 @@ export class OverworldMap {
         object.id = key
         object.mount(this)
       })
+    }
+    async startCutScene(events){
+      this.isCutScenePlaying = true
+      for(let i =0;i<events.length;i++){
+        const eventHandler = new OverworldEvent({
+          map:this,
+          event:events[i]
+        })
+        await eventHandler.init()
+      }
+      this.isCutScenePlaying = false
     }
     addWall(x,y){
       this.walls[`${x},${y}`] = true

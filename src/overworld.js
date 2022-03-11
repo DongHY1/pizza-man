@@ -36,5 +36,13 @@ export class Overworld {
     this.directionInput = new DirectionInput();
     this.directionInput.init();
     this.startGameLoop();
+
+    this.map.startCutScene([
+      {who:"hero",type:"walk",direction:"down"},
+      {who:"npc1",type:"walk",direction:"left"},
+      {who:"npc1",type:"walk",direction:"left"},
+      {who:"npc1",type:"walk",direction:"up"},
+      {who:"npc2",type:"stand",direction:"down",time:100},
+    ])
   }
 }
