@@ -1,4 +1,5 @@
 import { GameObj } from "./GameObj";
+import {emitEvent} from "./share/utils"
 export class Person extends GameObj {
     constructor(config) {
         super(config)
@@ -30,17 +31,31 @@ export class Person extends GameObj {
         this.direction = behavior.direction
         if (behavior.type === 'walk') {
             if (state.map.isSpace(this.x, this.y, this.direction)) {
+                behavior.tryAgain && setTimeout(()=>{
+                    this.startBehavior(state, behavior)
+                },10)
                 return
             }
+            state.map.updateWall(this.x, this.y, this.direction)
+            this.movingProgessRemain = 16
+            this.updateSprite()
         }
-        state.map.updateWall(this.x, this.y, this.direction)
-        this.movingProgessRemain = 16
+        if(behavior.type === 'stand'){
+            setTimeout(()=>{
+                emitEvent("PersonStandingComplete",{whoId:this.id})
+            },100)
+        }
     }
     // 更新人物位置
     updatePosition() {
         const [property, change] = this.directionUpdate[this.direction]
         this[property] += change
         this.movingProgessRemain -= 1
+        if(this.movingProgessRemain===0){
+            // 说明人物已经移动完毕，可以触发事件了
+            // 设计模式：Single Pattern
+            emitEvent("PersonWalkingComplete",{whoId:this.id})
+        }
     }
     // 更新人物Sprite图中所处方向
     updateSprite() {
@@ -49,7 +64,7 @@ export class Person extends GameObj {
             return
         }
         this.sprite.setAnimation("idle-" + this.direction)
-
+        
     }
 
 }

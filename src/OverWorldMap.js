@@ -9,6 +9,8 @@ export class OverworldMap {
   
       this.upperImage = new Image();
       this.upperImage.src = config.upperSrc;
+
+      this.isCutScenePlaying = false
     }
   
     drawLowerImage(ctx,cameraPerson) {
@@ -23,7 +25,9 @@ export class OverworldMap {
       return this.walls[`${nextX},${nextY}`] || false
     }
     mountObj(){
-      Object.values(this.gameObj).forEach(object => {
+      Object.keys(this.gameObj).forEach(key => {
+        let object = this.gameObj[key]
+        object.id = key
         object.mount(this)
       })
     }
