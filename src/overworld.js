@@ -16,7 +16,8 @@ export class Overworld {
       Object.values(this.map.gameObj).forEach(object => {
         // 更新角色实时位置 
         object.update({
-          arrow: this.directionInput.direction
+          arrow: this.directionInput.direction,
+          map:this.map
         })
         // 绘制角色位置
         object.sprite.draw(this.ctx, cameraPerson);
@@ -27,8 +28,10 @@ export class Overworld {
     requestAnimationFrame(step)
   }
   init() {
-    // 初始化地图->加载人物
+    // 初始化地图
     this.map = new OverworldMap(Map.DemoRoom);
+    // 加载人物
+    this.map.mountObj()
     // 控制人物移动
     this.directionInput = new DirectionInput();
     this.directionInput.init();
