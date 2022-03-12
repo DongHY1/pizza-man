@@ -13,6 +13,7 @@ export class GameObj{
         })
         this.behaviorLoop = config.behaviorLoop || []
         this.behaviorLoopIndex = 0
+        this.talking = config.talking || []
     }
     mount(map){
         console.log("墙壁坐标添加!")
@@ -27,7 +28,7 @@ export class GameObj{
     }
     async doBeahviorEvent(map){
         // 如果此时正在播放过场动画 或者 人物没有循环
-        if(map.isCutScenePlaying || this.behaviorLoop.length===0){
+        if(map.isCutScenePlaying || this.behaviorLoop.length===0 || this.isStanding){
             return
         }
         // 拿到此时人物事件

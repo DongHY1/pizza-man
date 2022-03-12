@@ -1,3 +1,6 @@
+import {TextMessage} from './TextMessage'
+import {oppositeDirection} from './share/utils'
+import {Map} from './share/Map'
 export class OverworldEvent {
     constructor({ map, event }) {
         this.map = map
@@ -41,6 +44,21 @@ export class OverworldEvent {
         }
         // 当人物走完时，触发事件
         document.addEventListener("PersonStandingComplete", completeHandler)
+    }
+    textMessage(resolve){
+        if(this.event.faceHero){
+            const npc = this.map.gameObj[this.event.faceHero]
+            npc.direction = oppositeDirection(this.map.gameObj["hero"].direction)
+        }
+        const message = new TextMessage({
+            text:this.event.text,
+            onComplete:()=>resolve()
+        })
+        message.init(document.querySelector(".game-container"))
+    }
+    changeMap(resolve){
+        this.map.overworld.startMap(Map[this.event.map])
+        resolve()
     }
     init() {
         return new Promise((resolve) => {

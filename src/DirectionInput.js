@@ -17,7 +17,6 @@ export class DirectionInput{
             if (dir && this.directionsArray.indexOf(dir) === -1) {
               this.directionsArray.unshift(dir);
             }
-            console.log(this.directionsArray)
           });
         document.addEventListener("keyup", e => {
             const dir = this.map[e.code];
@@ -25,7 +24,6 @@ export class DirectionInput{
             if (index!==-1) {
               this.directionsArray.splice(index, 1);
             }
-            console.log(this.directionsArray)
           })
     }
 }

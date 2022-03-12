@@ -2,6 +2,7 @@ import { OverworldEvent } from "./OverWorldEvent";
 import { useGrid,nextPosition} from "./share/utils";
 export class OverworldMap {
     constructor(config) {
+      this.overworld = null
       this.gameObj = config.gameObj;
       // 墙壁坐标
       this.walls = config.walls || {}
@@ -12,6 +13,7 @@ export class OverworldMap {
       this.upperImage.src = config.upperSrc;
 
       this.isCutScenePlaying = false
+      this.cutsceneSpaces = config.cutsceneSpaces || {}
     }
   
     drawLowerImage(ctx,cameraPerson) {
@@ -42,6 +44,8 @@ export class OverworldMap {
         await eventHandler.init()
       }
       this.isCutScenePlaying = false
+      // 完成过场动画后 重置NPC行为
+      Object.values(this.gameObj).forEach(object=>object.doBeahviorEvent(this))
     }
     addWall(x,y){
       this.walls[`${x},${y}`] = true
@@ -53,5 +57,23 @@ export class OverworldMap {
       this.removeWall(x,y)
       const {nextX,nextY} = nextPosition(x,y,direction)
       this.addWall(nextX,nextY)
+    }
+    checkForActionCutScene(){
+      const hero = this.gameObj["hero"]
+      const nextPos = nextPosition(hero.x,hero.y,hero.direction)
+      const match = Object.values(this.gameObj).find((obj)=>{
+        return  `${obj.x},${obj.y}`=== `${nextPos.nextX},${nextPos.nextY}`
+      })
+      if(!this.isCutScenePlaying && match && match.talking.length){
+        this.startCutScene(match.talking[0].events)
+      }
+    }
+    checkForFootStepCutScene(){
+      const hero = this.gameObj["hero"]
+      const match = this.cutsceneSpaces[`${hero.x},${hero.y}`]
+      console.log(this.cutsceneSpaces)
+      if(!this.isCutScenePlaying && match){
+        this.startCutScene(match[0].events)
+      }
     }
   }

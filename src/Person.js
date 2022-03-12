@@ -13,6 +13,8 @@ export class Person extends GameObj {
             "left": ["x", -1],
             "right": ["x", 1]
         }
+        this.isStanding = false
+        
     }
     update(state) {
         if (this.movingProgessRemain > 0) {
@@ -41,9 +43,11 @@ export class Person extends GameObj {
             this.updateSprite()
         }
         if(behavior.type === 'stand'){
+            this.isStanding = true
             setTimeout(()=>{
                 emitEvent("PersonStandingComplete",{whoId:this.id})
-            },100)
+                this.isStanding = false
+            },behavior.time)
         }
     }
     // 更新人物位置
