@@ -1,4 +1,5 @@
 import {TextMessage} from './TextMessage'
+import {SceneTransition} from './SceneTransition'
 import {oppositeDirection} from './share/utils'
 import {Map} from './share/Map'
 export class OverworldEvent {
@@ -57,8 +58,13 @@ export class OverworldEvent {
         message.init(document.querySelector(".game-container"))
     }
     changeMap(resolve){
-        this.map.overworld.startMap(Map[this.event.map])
-        resolve()
+        const sceneTransition = new SceneTransition()
+        sceneTransition.init(document.querySelector(".game-container"),()=>{
+            this.map.overworld.startMap(Map[this.event.map])
+            resolve()
+            sceneTransition.fadeOut()
+        })
+
     }
     init() {
         return new Promise((resolve) => {

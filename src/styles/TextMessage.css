@@ -14,6 +14,12 @@
     font-size: 12px;
     font-family: 'VT323', monospace;
   }
+  .TextMessage span {
+    opacity: 0;
+  }
+  .TextMessage span.revealed {
+    opacity: 1;
+  }
   .TextMessage_Button {
     margin: 0;
     font-size: 8px;  

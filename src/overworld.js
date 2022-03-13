@@ -51,14 +51,15 @@ export class Overworld {
   }
   init() {
     this.startMap(Map.DemoRoom)
-    // 控制人物移动
-    this.directionInput = new DirectionInput();
-    this.directionInput.init();
-    this.startGameLoop();
     // 加载人物对话
     this.bindActionInput()
     // 对人物所在位置进行检测
     this.bindHeroPositionCheck()
+    // 控制人物移动
+    this.directionInput = new DirectionInput();
+    this.directionInput.init();
+    this.startGameLoop();
+
     // this.map.startCutScene([
     //   {who:"hero",type:"walk",direction:"down"},
     //   {who:"npc1",type:"walk",direction:"left"},
